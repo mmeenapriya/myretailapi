@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="myretail.main" target="1.8" />
+      <module name="myretail.test" target="1.8" />
+      <module name="MyRetailAPI.main" target="11" />
+      <module name="MyRetailAPI.test" target="11" />
+      <module name="SolrDBValidation.main" target="11" />
+      <module name="SolrDBValidation.test" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
