@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends MongoRepository<Product, String> {
-    Product findFirstByTcin(String productId);
+//    Product findById(String productId);
 }

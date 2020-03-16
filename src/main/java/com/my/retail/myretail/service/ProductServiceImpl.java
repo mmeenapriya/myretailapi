@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -29,17 +30,16 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductDTO getProductInfo(String productId) throws Exception {
-        ProductDTO productDTO = null;
-            try {
-                productDTO =  getProductDetails(productId);
-                Product priceDetails = getProductPrice(productId);
-                if(priceDetails!=null && productDTO!=null) {
-                    productDTO.setPrice(priceDetails.getPrice());
-                    productDTO.setCurrency(priceDetails.getCurrency());
-                }else{
-                    throw new IllegalArgumentException("Product Not Found");
+    public Product getProductInfo(String productId) throws Exception {
+        Product product = new Product();
+        try {
+                ProductDTO  productDTO =  getProductDetails(productId);
+                if(productDTO == null ){
+                    throw new IllegalArgumentException("Product Not Found ");
                 }
+                product.setProdDetails(productDTO.getProductId(), productDTO.getName());
+                Optional<Product> priceDetails = getProductPrice(productId);
+                priceDetails.ifPresent(it ->  product.setPriceDetails(it.getPrice(), it.getCurrency()));
             }
             catch (HttpClientErrorException e) {
                 if (HttpStatus.NOT_FOUND.equals(e.getStatusCode()) ){
@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService{
                 }
                 throw e;
             }
-        return productDTO;
+        return product;
     }
 
     private ProductDTO getProductDetails(String productId) throws HttpClientErrorException, Exception {
@@ -68,16 +68,28 @@ public class ProductServiceImpl implements ProductService{
         return response == null ? null : response.getBody();
     }
 
-    private Product getProductPrice(String productId) throws Exception {
-        Product product = null;
+    private Optional<Product> getProductPrice(String productId) throws Exception {
+        Optional<Product> product = Optional.empty();
             try {
-                 product =  repository.findFirstByTcin(productId);
-                System.out.println(product.getName()+" - "+product.getPrice());
+                product =  repository.findById(productId);
+//                 if(product1.isEmpty()){
+//                     product   = updateProduct(product1.get());
+//                 }
+//                System.out.println(product.getName()+" - "+product.getPrice());
+                return product;
+
             }
             catch (Exception e) {
                 throw e;
             }
-        return product;
     }
+
+    @Override
+    public Product updateProduct(Product product) throws Exception{
+        product.updateCurrency();
+        return repository.save(product);
+    }
+
+
 }
 

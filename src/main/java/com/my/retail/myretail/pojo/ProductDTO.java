@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.my.retail.myretail.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,22 +26,19 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDTO {
 //    @Field(name="tcin")
-String productId;
+    String productId;
     String name;
     Double price;
-    String error;
     String currency;
 
     public ProductDTO(String productId, String error ){
         this.productId = productId;
         this.name = error;
     }
-    public ProductDTO(String error ){
-        this.error = error;
-    }
     public ProductDTO(String productId, String name, Double price ){
         this.productId = productId;
         this.name = name;
         this.price = price;
     }
+
 }
