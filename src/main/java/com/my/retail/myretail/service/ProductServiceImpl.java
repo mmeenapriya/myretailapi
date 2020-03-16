@@ -4,6 +4,7 @@ import com.my.retail.myretail.domain.Product;
 import com.my.retail.myretail.pojo.ProductDTO;
 import com.my.retail.myretail.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
@@ -23,6 +24,9 @@ public class ProductServiceImpl implements ProductService{
 
     @Autowired
     ProductRepository repository;
+
+    @Value("${api.url}")
+    String url;
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
@@ -51,7 +55,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private ProductDTO getProductDetails(String productId) throws HttpClientErrorException, Exception {
-        String url = "https://redsky.target.com/v2/pdp/tcin/" + productId;
+        String apiUrl = String.format(url, productId);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         ResponseEntity<ProductDTO> response = null;
@@ -59,7 +63,7 @@ public class ProductServiceImpl implements ProductService{
             return null;
         } else {
             try {
-                response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), ProductDTO.class);
+                response = restTemplate.exchange(apiUrl, HttpMethod.GET, new HttpEntity<>(headers), ProductDTO.class);
             }
             catch (HttpClientErrorException e) {
                 throw e;
