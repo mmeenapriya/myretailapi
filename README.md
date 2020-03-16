@@ -10,6 +10,9 @@ Mongo DB Atlas is used to store pricing info and the product details are retriev
 This application is deployed in Amazon EBS. 
 Currently this is hosted manually as Jar but can be automated later.
 
+If a product is in External API but no pricing info, it just displays the product name
+if a product has pricing info in mongo it displays both
+
 ####To get the product details:
 
 curl -X GET \
